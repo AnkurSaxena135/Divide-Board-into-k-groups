@@ -1,16 +1,31 @@
-package codes;
 
+
+import java.awt.EventQueue;
 import java.util.PriorityQueue;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DivideBoard {
 
 	private static Cell[][] board;
 	private static int boardSize;
-	private static PriorityQueue<Cell> queue = new PriorityQueue<Cell>(8,(cell1,cell2)-> {return Integer.compare(cell1.degree,cell2.degree);});
+	private static PriorityQueue<Cell> queue = new PriorityQueue<Cell>(5,(cell1,cell2)-> {return Integer.compare(cell1.degree,cell2.degree);});
 
 	public static void main(String[] args) {
-		Cell[][] myBoard = divideBoard(9,9);
-		printBoard(myBoard);
+		int groups=10;
+		int size=10;
+		Cell[][] myBoard = divideBoard(groups,size);
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Board boardUI = new Board(groups,size,myBoard);
+					boardUI.getFrame().setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		//printBoard(myBoard);
 	}
 	private static Cell[][] divideBoard(int groups,int size) {
 
@@ -19,9 +34,9 @@ public class DivideBoard {
 
 		initBoard();
 
-		int initRow= (int) (size*Math.random());
-		int initCol= (int) (size*Math.random());
-
+		int initRow= ThreadLocalRandom.current().nextInt(0, size);
+		int initCol= ThreadLocalRandom.current().nextInt(0, size);
+		
 		queue.add(board[initRow][initCol]);
 
 		for(int grpno = 1; grpno <= groups; grpno++){
@@ -51,19 +66,19 @@ public class DivideBoard {
 	}
 	private static void assignDegree() {
 		//assign all cells
-		assignValues(board,-1,-1,4);
+		assignValue(board,-1,-1,4);
 		//assign edges
-		assignValues(board,0,-1,3);
-		assignValues(board,boardSize-1,-1,3);
-		assignValues(board,-1,0,3);
-		assignValues(board,-1,boardSize-1,3);
+		assignValue(board,0,-1,3);
+		assignValue(board,boardSize-1,-1,3);
+		assignValue(board,-1,0,3);
+		assignValue(board,-1,boardSize-1,3);
 		//assign corners
-		assignValues(board,0,0,2);
-		assignValues(board,0,boardSize-1,2);
-		assignValues(board,boardSize-1,0,2);
-		assignValues(board,boardSize-1,boardSize-1,2);
+		assignValue(board,0,0,2);
+		assignValue(board,0,boardSize-1,2);
+		assignValue(board,boardSize-1,0,2);
+		assignValue(board,boardSize-1,boardSize-1,2);
 	}
-	private static void assignValues(Cell[][] board, int row, int col, int deg) {
+	private static void assignValue(Cell[][] board, int row, int col, int deg) {
 		if(row==-1 && col==-1) {
 			for(int i=0;i<boardSize;i++) {
 				for(int j=0;j<boardSize;j++) {
@@ -71,7 +86,7 @@ public class DivideBoard {
 				}
 			}
 		}
-		else if(row!=-1 && col!=-1) {board[row][col].degree=deg;}
+		else if(row!=-1 && col!=-1) board[row][col].degree=deg;
 		else {
 			if(row==-1) {
 				for(int i=0;i<boardSize;i++) {board[i][col].degree=deg;}
@@ -109,7 +124,8 @@ public class DivideBoard {
 			queue.remove(board[row][col+1]);
 			queue.add(board[row][col+1]);
 		}
-	}
+	}	
+	@SuppressWarnings("unused")
 	private static void printBoard(Cell[][] board) {
 
 		for(int i=0;i<boardSize;i++) {
@@ -118,6 +134,5 @@ public class DivideBoard {
 			}
 			System.out.println();
 		}
-		System.out.println("-------------");
 	}
 }
