@@ -49,6 +49,38 @@ public class DivideBoard {
 		}
 		assignDegree();
 	}
+	private static void assignDegree() {
+		//assign all cells
+		assignValues(board,-1,-1,4);
+		//assign edges
+		assignValues(board,0,-1,3);
+		assignValues(board,boardSize-1,-1,3);
+		assignValues(board,-1,0,3);
+		assignValues(board,-1,boardSize-1,3);
+		//assign corners
+		assignValues(board,0,0,2);
+		assignValues(board,0,boardSize-1,2);
+		assignValues(board,boardSize-1,0,2);
+		assignValues(board,boardSize-1,boardSize-1,2);
+	}
+	private static void assignValues(Cell[][] board, int row, int col, int deg) {
+		if(row==-1 && col==-1) {
+			for(int i=0;i<boardSize;i++) {
+				for(int j=0;j<boardSize;j++) {
+					board[i][j].degree=deg;
+				}
+			}
+		}
+		else if(row!=-1 && col!=-1) {board[row][col].degree=deg;}
+		else {
+			if(row==-1) {
+				for(int i=0;i<boardSize;i++) {board[i][col].degree=deg;}
+			}
+			if(col==-1) {
+				for(int j=0;j<boardSize;j++) {board[row][j].degree=deg;}
+			}
+		}
+	}
 	private static void selectCell( int row, int col, int group) {
 		
 		board[row][col].group=group;
@@ -76,40 +108,6 @@ public class DivideBoard {
 			board[row][col+1].degree--;
 			queue.remove(board[row][col+1]);
 			queue.add(board[row][col+1]);
-		}
-		
-
-	}
-	private static void assignDegree() {
-		//assign all cells
-		assignValues(board,-1,-1,4);
-		//assign edges
-		assignValues(board,0,-1,3);
-		assignValues(board,boardSize-1,-1,3);
-		assignValues(board,-1,0,3);
-		assignValues(board,-1,boardSize-1,3);
-		//assign corners
-		assignValues(board,0,0,2);
-		assignValues(board,0,boardSize-1,2);
-		assignValues(board,boardSize-1,0,2);
-		assignValues(board,boardSize-1,boardSize-1,2);
-	}
-	private static void assignValues(Cell[][] board, int row, int col, int deg) {
-		if(row==-1 && col==-1) {
-			for(int i=0;i<boardSize;i++) {
-				for(int j=0;j<boardSize;j++) {
-					board[i][j].degree=deg;
-				}
-			}
-		}
-		else if(row!=-1 && col!=-1) board[row][col].degree=deg;
-		else {
-			if(row==-1) {
-				for(int i=0;i<boardSize;i++) {board[i][col].degree=deg;}
-			}
-			if(col==-1) {
-				for(int j=0;j<boardSize;j++) {board[row][j].degree=deg;}
-			}
 		}
 	}
 	private static void printBoard(Cell[][] board) {
