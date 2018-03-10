@@ -9,31 +9,15 @@ public static void main(String[] args) {
 		printBoard(myBoard);
 	}
 ```
-This should divide a 9x9 board into 9 equal and contiguous groups as demonstrated below
-```
-2|2|2|2|3|3|3|3|3|
-2|2|2|4|4|4|4|3|3|
-1|2|2|4|4|4|4|4|3|
-1|1|5|5|5|5|5|5|3|
-1|1|5|5|9|9|8|8|8|
-1|1|5|9|9|9|9|8|8|
-1|1|6|9|9|9|8|8|8|
-6|6|6|6|7|7|7|7|8|
-6|6|6|6|7|7|7|7|7|
-```
+This should divide a 9x9 board into 9 equal and contiguous groups as demonstrated below ![](https://github.com/AnkurSaxena135/Divide-Board-into-k-groups/blob/master/sample/9x9.PNG)
+
 
 + Similarly, passing the following arguments
 ```
 public static void main(String[] args) {
-		Cell[][] myBoard = divideBoard(4,4);
+		Cell[][] myBoard = divideBoard(9,6);
 		printBoard(myBoard);
 	}
 ```
-should divide a 4x4 board into 4 equal and contiguous groups as demonstrated below
-```
-2|2|2|1|
-4|4|2|1|
-4|4|3|1|
-3|3|3|1|
-```
-
+should divide a 6x6 board into 9 equal and contiguous groups as demonstrated below
+![](https://github.com/AnkurSaxena135/Divide-Board-into-k-groups/blob/master/sample/6x6.PNG)
