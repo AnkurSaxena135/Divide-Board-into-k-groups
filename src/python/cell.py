@@ -2,13 +2,18 @@ class Cell:
     def __init__(self, row, col):
         self.row = row
         self.col = col
-        self.deg = None
-        self.group = None
+        self.group = -1
         self.assigned = False
 
     def __repr__(self):
-        return f"<Cell: ({self.row},{self.col}) ({self.group}, {self.deg})>"
-    
+        return f"<Cell: ({self.row},{self.col}) ({self.group})>"
+
+    def __gt__(self, other):
+        return self.deg > other.deg
+
+    def is_assigned(self):
+        return self.assigned
+
     def neighbours(self, board):
         for r, c in {
             "left": (0, -1),
