@@ -1,5 +1,6 @@
 from random import randint
 from cell import Cell
+from board_gui import BoardGUI
 
 
 class Board:
@@ -11,6 +12,7 @@ class Board:
             for r in range(nrow)
         ]
         self.assign_degree()
+        self.gui = BoardGUI(self)
 
     def divide_board(self, ngroup):
         """Divide board into n equal groups
@@ -93,12 +95,16 @@ class Board:
                 print(f"{cell.group:2}", end="|")
             print("")
 
+    def display_board(self):
+        """Display gui for the board"""
+        self.gui.display()
+
     def get_random_cell(self):
         """Select a random cell from the board"""
         return self.grid[randint(0, self.nrow-1)][randint(0, self.ncol-1)]
 
 
 if __name__ == "__main__":
-    board = Board(4, 10)
+    board = Board(4, 5)
     board.divide_board(5)
-    board.print_board()
+    board.display_board()
