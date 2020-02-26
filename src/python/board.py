@@ -1,40 +1,83 @@
 from random import randint
-
 from cell import Cell
 
 
 class Board:
-
     def __init__(self, nrow, ncol):
-        self._nrow = nrow
-        self._ncol = ncol
-        self._grid = [
+        self.nrow = nrow
+        self.ncol = ncol
+        self.grid = [
             [Cell(r, c) for c in range(ncol)]
             for r in range(nrow)
         ]
-        
         self.assign_degree()
 
-    @property
-    def nrow(self):
-        return self._nrow
+    def divide_board(self, ngroup):
+        """Divide board into n equal groups
+        Args:
+            ngroup (int): number of group
+        Raises:
+            ValueError: if division into 
+                n groups is not possible
+        """
+        if self.nrow*self.ncol % ngroup != 0:
+            raise ValueError(
+                f"Can't divide board into {ngroup} equal groups")
 
-    @property
-    def ncol(self):
-        return self._ncol
+        init_cell = self.get_random_cell()
+        cells_per_group = self.nrow*self.ncol // ngroup
+        self.assign_recursively(init_cell, 1, cells_per_group)
 
-    @property
-    def grid(self):
-        return self._grid
+    def assign_recursively(self, cell, cell_number, cells_per_group):
+        """ Recursively assign a group to each cell
+        Args:
+            cell (Cell): current cell whwich needs to be assigned
+            cell_number (int): the order of current cell 
+                Value increases serially. Range: [1, row* col]
+                i.e. 1 means 1st cell to be assigned
+            cells_per_group (int): cells per group
+                constant value passed to avoid recalculation
+        """
+        cell.group = (self.nrow*self.ncol - cell_number) // cells_per_group
+        cell.assigned = True
+        cell.update_neighbours(self)
+        next_cell = self.next_cell(cell)
+        if next_cell:
+            self.assign_recursively(
+                next_cell,
+                cell_number + 1,
+                cells_per_group
+            )
 
-    def print_board(self):
-        for row in self._grid:
-            for cell in row:
-                print(f"{cell.group:2}", end="|")
-            print("")
+    def next_cell(self, cell):
+        """ Get the next cell by selecting the neighbouring cell
+        with lowest degree
+        Args:
+            cell (Cell): current cell
+        Returns:
+            cell (Cell): next neighbouring cell with lowest degree
+        """
+        min_degree = 4
+        next_cell = None
+
+        for neighbour in cell.neighbours(self):
+            if not neighbour.assigned:
+                deg = neighbour.degree
+                if min_degree > deg:
+                    next_cell = neighbour
+                    min_degree = deg
+        return next_cell
 
     def assign_degree(self):
-        for row in self._grid:
+        """ Assign degree to all cells on the board. Degree of a
+        cell means the number of unassigned cells in it's neighbourhood.
+        Example:
+            degress on a 3x3 board
+            |2|3|2|
+            |3|4|3|
+            |2|3|2|
+        """
+        for row in self.grid:
             for cell in row:
                 degree = 4
                 if cell.row == 0 or cell.row == self.nrow-1:
@@ -43,42 +86,19 @@ class Board:
                     degree -= 1
                 cell.degree = degree
 
-    def divide_board(self, ngroup):
-        nrow = self.nrow
-        ncol = self.ncol
+    def print_board(self):
+        """Print the board on console"""
+        for row in self.grid:
+            for cell in row:
+                print(f"{cell.group:2}", end="|")
+            print("")
 
-        if nrow*ncol % ngroup != 0:
-            raise Exception(f"Board can't be divided into {ngroup} equal groups")
-
-        cells_per_group = nrow*ncol // ngroup
-        init_row = randint(0, nrow-1)
-        init_col = randint(0, ncol-1)
-        init_cell = self._grid[init_row][init_col]
-
-        self.recurse_cells(init_cell, cells_per_group, 1)
-
-    def recurse_cells(self, cell, cells_per_group, assigned_count):
-        if cell:
-            cell.group = (self.nrow*self.ncol - assigned_count) // cells_per_group
-            cell.assigned = True
-            self.recurse_cells(
-                self.next_cell(cell), cells_per_group, assigned_count + 1)
-
-    def next_cell(self, cell):
-        min_degree = 4
-        next_cell = None
-
-        for neighbour in cell.neighbours(self):
-            if not neighbour.assigned:
-                deg = neighbour.degree
-                deg -= 1
-                if min_degree > deg:
-                    next_cell = neighbour
-                    min_degree = deg
-        return next_cell
+    def get_random_cell(self):
+        """Select a random cell from the board"""
+        return self.grid[randint(0, self.nrow-1)][randint(0, self.ncol-1)]
 
 
 if __name__ == "__main__":
-    board = Board(4, 40)
-    board.divide_board(16)
+    board = Board(4, 10)
+    board.divide_board(5)
     board.print_board()
