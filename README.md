@@ -30,7 +30,7 @@ One approach to achieve a sure-shot solution is to ensure that the cell being as
 2. Assign a group to the current cell and mark it as assigned.
 3. Decrease degree of neighbouring cells by 1.
 4. Select the next neighbour with the lowest degree i.e. 2
-5. Repeat 1-3 until all cells are assigned.
+5. Repeat 2-4 until all cells are assigned.
 
 
 ## Code
