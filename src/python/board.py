@@ -75,7 +75,7 @@ class Board:
         """ Assign degree to all cells on the board. Degree of a
         cell means the number of unassigned cells in it's neighbourhood.
         Example:
-            degress on a 3x3 board
+            degrees on a 3x3 board
             |2|3|2|
             |3|4|3|
             |2|3|2|
