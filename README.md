@@ -24,7 +24,7 @@ Degree of cells in a 4x4 board:
 |2|3|3|2|
 ```
 
-One approach to achieve a sure-shot solution is to ensure that the cell being assigned always has the lowest degree i.e. 2.  An algorith would look as follows:
+One approach to achieve a sure-shot solution is to ensure that the cell being assigned always has the lowest degree i.e. 2.  An algorithm would look as follows:
 
 1. Start from any corner since they have the lowest degree on the entire board.
 2. Assign a group to the current cell and mark it as assigned.
