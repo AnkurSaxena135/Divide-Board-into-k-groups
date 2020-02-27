@@ -26,7 +26,7 @@ class Board:
             raise ValueError(
                 f"Can't divide board into {ngroup} equal groups")
 
-        init_cell = self.get_random_cell()
+        init_cell = self.grid[0][0]
         cells_per_group = self.nrow*self.ncol // ngroup
         self.assign_recursively(init_cell, 1, cells_per_group)
 
@@ -42,6 +42,7 @@ class Board:
         """
         cell.group = (self.nrow*self.ncol - cell_number) // cells_per_group
         cell.assigned = True
+        cell.degree = 0
         cell.update_neighbours(self)
         next_cell = self.next_cell(cell)
         if next_cell:
@@ -88,23 +89,12 @@ class Board:
                     degree -= 1
                 cell.degree = degree
 
-    def print_board(self):
-        """Print the board on console"""
-        for row in self.grid:
-            for cell in row:
-                print(f"{cell.group:2}", end="|")
-            print("")
-
     def display_board(self):
         """Display gui for the board"""
         self.gui.display()
 
-    def get_random_cell(self):
-        """Select a random cell from the board"""
-        return self.grid[randint(0, self.nrow-1)][randint(0, self.ncol-1)]
-
 
 if __name__ == "__main__":
-    board = Board(4, 5)
-    board.divide_board(5)
+    board = Board(9, 10)
+    board.divide_board(15)
     board.display_board()
