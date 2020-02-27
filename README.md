@@ -44,7 +44,7 @@ ngroups = 15
 
 b = Board(nrows, ncols)  # initialize the board
 b.divide_board(ngroups)  # main algorithm
-b.display_board()		 # display gui of divided board
+b.display_board()        # display gui of divided board
 ```
 
 Example output:
